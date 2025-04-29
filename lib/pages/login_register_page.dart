@@ -31,7 +31,7 @@ class _LoginRagistePageState extends State<LoginRagistePage> {
     try {
       await Auth().userLogin(
           email: emailController.text, password: passwordController.text);
-      print(Auth().currentUser!.uid);
+      //print(Auth().currentUser!.uid);
     } on FirebaseAuthException catch (e) {
       setState(() {
         errorMessage = e.message;

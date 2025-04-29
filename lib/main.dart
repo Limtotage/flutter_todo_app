@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_todo_app/constants/color.dart';
-import 'package:flutter_todo_app/pages/login_register_page.dart';
+//import 'package:flutter_todo_app/pages/login_register_page.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'firebase_options.dart';
 
