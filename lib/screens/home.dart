@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_todo_app/constants/color.dart';
-import 'package:flutter_todo_app/customItems/headerItem.dart';
-import 'package:flutter_todo_app/customItems/todoItem.dart';
-import 'package:flutter_todo_app/screens/addNewTask.dart';
+import 'package:flutter_todo_app/customItems/header_item.dart';
+import 'package:flutter_todo_app/customItems/todo_item.dart';
+import 'package:flutter_todo_app/screens/add_new_task.dart';
 import 'package:hexcolor/hexcolor.dart';
 
 class HomeScreen extends StatefulWidget {

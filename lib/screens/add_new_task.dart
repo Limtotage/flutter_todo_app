@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_todo_app/constants/color.dart';
-import 'package:flutter_todo_app/customItems/GestureIconItems.dart';
-import 'package:flutter_todo_app/customItems/addNewTaskHeader.dart';
-import 'package:flutter_todo_app/customItems/timeDateInputItems.dart';
+import 'package:flutter_todo_app/customItems/gesture_icon_items.dart';
+import 'package:flutter_todo_app/customItems/add_new_task_header.dart';
+import 'package:flutter_todo_app/customItems/time_date_input_items.dart';
 import 'package:hexcolor/hexcolor.dart';
 
 class AddNewTaskScreen extends StatelessWidget {
@@ -10,8 +10,6 @@ class AddNewTaskScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double deviceHeight = MediaQuery.of(context).size.height;
-    double deviceWidth = MediaQuery.of(context).size.width;
     return SafeArea(
       child: Scaffold(
         backgroundColor: HexColor(backGroundColor),

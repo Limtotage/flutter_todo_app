@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_todo_app/screens/home.dart';
 import 'package:flutter_todo_app/services/auth.dart';
 
 class LoginRagistePage extends StatefulWidget {
@@ -70,8 +71,14 @@ class _LoginRagistePageState extends State<LoginRagistePage> {
                 onPressed: () {
                   if (isLogin) {
                     userLogin();
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => HomeScreen(),
+                    ));
                   } else {
                     createuser();
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => HomeScreen(),
+                    ));
                   }
                 },
                 child: isLogin ? const Text("Login") : const Text("Sign Up")),
