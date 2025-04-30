@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_todo_app/constants/color.dart';
+import 'package:flutter_todo_app/customItems/headerItem.dart';
+import 'package:flutter_todo_app/customItems/todoItem.dart';
 //import 'package:flutter_todo_app/pages/login_register_page.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'firebase_options.dart';
@@ -20,12 +22,12 @@ class MyApp extends StatefulWidget {
   State<MyApp> createState() => _MyAppState();
 }
 
+List<String> todo = ["Test 1", "Test 2", "Test 3"];
+
 class _MyAppState extends State<MyApp> {
   bool isChecked = false;
   @override
   Widget build(BuildContext context) {
-    double deviceHeight = MediaQuery.of(context).size.height;
-    double deviceWidth = MediaQuery.of(context).size.width;
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: SafeArea(
@@ -34,137 +36,20 @@ class _MyAppState extends State<MyApp> {
           body: Column(
             children: [
               //Header
-              Container(
-                decoration: const BoxDecoration(
-                  color: Colors.green,
-                  image: DecorationImage(
-                      image: AssetImage("lib/assets/images/greenHeader.png"),
-                      fit: BoxFit.cover),
-                ),
-                width: deviceWidth,
-                height: deviceHeight / 3,
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(top: 25),
-                      child: Text(
-                        "Bugunun Tarihi",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 40),
-                      child: Text(
-                        "My Todo List",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 36,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    )
-                  ],
-                ),
-              ),
+              Headeritem(),
               //Top Column
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
                   child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        Card(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20)),
-                          child: Padding(
-                            padding: const EdgeInsets.all(20),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Icon(
-                                  Icons.notes_outlined,
-                                  size: 40,
-                                ),
-                                Text(
-                                  "Study Lesseon",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 21),
-                                ),
-                                Checkbox(
-                                    value: isChecked,
-                                    onChanged: (val) => {
-                                          setState(() {
-                                            isChecked = val!;
-                                          })
-                                        })
-                              ],
-                            ),
-                          ),
-                        ),
-                        Card(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20)),
-                          child: Padding(
-                            padding: const EdgeInsets.all(20),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Icon(
-                                  Icons.notes_outlined,
-                                  size: 40,
-                                ),
-                                Text(
-                                  "Study Lesseon",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 21),
-                                ),
-                                Checkbox(
-                                    value: isChecked,
-                                    onChanged: (val) => {
-                                          setState(() {
-                                            isChecked = val!;
-                                          })
-                                        })
-                              ],
-                            ),
-                          ),
-                        ),
-                        Card(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20)),
-                          child: Padding(
-                            padding: const EdgeInsets.all(20),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Icon(
-                                  Icons.notes_outlined,
-                                  size: 40,
-                                ),
-                                Text(
-                                  "Study Lesseon",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 21),
-                                ),
-                                Checkbox(
-                                    value: isChecked,
-                                    onChanged: (val) => {
-                                          setState(() {
-                                            isChecked = val!;
-                                          })
-                                        })
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                      child: ListView.builder(
+                    primary: false,
+                    shrinkWrap: true,
+                    itemCount: todo.length,
+                    itemBuilder: (context, index) {
+                      return Todoitem(title: todo[index]);
+                    },
+                  )),
                 ),
               ),
               //Completed Text
@@ -182,98 +67,14 @@ class _MyAppState extends State<MyApp> {
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
                   child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        Card(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20)),
-                          child: Padding(
-                            padding: const EdgeInsets.all(20),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Icon(
-                                  Icons.notes_outlined,
-                                  size: 40,
-                                ),
-                                Text(
-                                  "Study Lesseon",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 21),
-                                ),
-                                Checkbox(
-                                    value: isChecked,
-                                    onChanged: (val) => {
-                                          setState(() {
-                                            isChecked = val!;
-                                          })
-                                        })
-                              ],
-                            ),
-                          ),
-                        ),
-                        Card(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20)),
-                          child: Padding(
-                            padding: const EdgeInsets.all(20),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Icon(
-                                  Icons.notes_outlined,
-                                  size: 40,
-                                ),
-                                Text(
-                                  "Study Lesseon",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 21),
-                                ),
-                                Checkbox(
-                                    value: isChecked,
-                                    onChanged: (val) => {
-                                          setState(() {
-                                            isChecked = val!;
-                                          })
-                                        })
-                              ],
-                            ),
-                          ),
-                        ),
-                        Card(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20)),
-                          child: Padding(
-                            padding: const EdgeInsets.all(20),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Icon(
-                                  Icons.notes_outlined,
-                                  size: 40,
-                                ),
-                                Text(
-                                  "Study Lesseon",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 21),
-                                ),
-                                Checkbox(
-                                    value: isChecked,
-                                    onChanged: (val) => {
-                                          setState(() {
-                                            isChecked = val!;
-                                          })
-                                        })
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                      child: ListView.builder(
+                    primary: false,
+                    shrinkWrap: true,
+                    itemCount: todo.length,
+                    itemBuilder: (context, index) {
+                      return Todoitem(title: todo[index]);
+                    },
+                  )),
                 ),
               ),
               //New task button
