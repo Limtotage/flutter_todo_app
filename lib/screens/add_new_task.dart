@@ -51,8 +51,9 @@ class AddNewTaskScreen extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           GestureIconsItem(path: "lib/assets/images/Task.png"),
-                          GestureIconsItem(path: "lib/assets/images/Date.png"),
-                          GestureIconsItem(path: "lib/assets/images/Trophy.png")
+                          GestureIconsItem(
+                              path: "lib/assets/images/Calendar.png"),
+                          GestureIconsItem(path: "lib/assets/images/Goal.png")
                         ],
                       ),
                     ),

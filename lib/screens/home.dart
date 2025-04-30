@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_todo_app/constants/color.dart';
+import 'package:flutter_todo_app/constants/task_type.dart';
 import 'package:flutter_todo_app/customItems/header_item.dart';
 import 'package:flutter_todo_app/customItems/todo_item.dart';
+import 'package:flutter_todo_app/model/task.dart';
 import 'package:flutter_todo_app/screens/add_new_task.dart';
 import 'package:hexcolor/hexcolor.dart';
 
@@ -13,8 +15,35 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  List<String> todo = ["Test 1", "Test 2", "Test 3"];
-  List<String> todoCompleted = ["Code a Game", "Go to School"];
+  List<Task> todo = [
+    Task(
+        type: TaskType.note,
+        title: "Study Lesson",
+        description: "Study Comp177",
+        isCompleted: false),
+    Task(
+        type: TaskType.goal,
+        title: "Run 5 Km",
+        description: "Just Do It!",
+        isCompleted: false),
+    Task(
+        type: TaskType.calendar,
+        title: "Go to Party",
+        description: "Attend to party",
+        isCompleted: false),
+  ];
+  List<Task> todoCompleted = [
+    Task(
+        type: TaskType.goal,
+        title: "Run 5 Km",
+        description: "Just Do It!",
+        isCompleted: false),
+    Task(
+        type: TaskType.calendar,
+        title: "Go to Party",
+        description: "Attend to party",
+        isCompleted: false),
+  ];
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -35,7 +64,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     shrinkWrap: true,
                     itemCount: todo.length,
                     itemBuilder: (context, index) {
-                      return Todoitem(title: todo[index]);
+                      return Todoitem(task: todo[index]);
                     },
                   )),
                 ),
@@ -60,7 +89,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     shrinkWrap: true,
                     itemCount: todoCompleted.length,
                     itemBuilder: (context, index) {
-                      return Todoitem(title: todoCompleted[index]);
+                      return Todoitem(task: todoCompleted[index]);
                     },
                   )),
                 ),
