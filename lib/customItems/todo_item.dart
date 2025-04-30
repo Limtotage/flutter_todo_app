@@ -41,6 +41,7 @@ class _TodoitemState extends State<Todoitem> {
                   Text(
                     widget.task.description,
                     style: TextStyle(
+                        color: Color.fromARGB(255, 81, 81, 81),
                         fontWeight: FontWeight.bold,
                         fontSize: 15,
                         decoration: widget.task.isCompleted

@@ -44,6 +44,12 @@ class _HomeScreenState extends State<HomeScreen> {
         description: "Attend to party",
         isCompleted: false),
   ];
+  void addNewTask(Task newTask) {
+    setState(() {
+      todo.add(newTask);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -98,7 +104,9 @@ class _HomeScreenState extends State<HomeScreen> {
               ElevatedButton(
                   onPressed: () {
                     Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => AddNewTaskScreen(),
+                      builder: (context) => AddNewTaskScreen(
+                        addNewTask: (newTask) => addNewTask(newTask),
+                      ),
                     ));
                   },
                   child: Text("Add New Task")),

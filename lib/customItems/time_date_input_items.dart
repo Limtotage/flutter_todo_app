@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
 class CustomDateTime extends StatefulWidget {
-  const CustomDateTime({super.key, required this.title});
+  const CustomDateTime(
+      {super.key, required this.title, required this.controller});
   final String title;
+  final TextEditingController controller;
   @override
   State<CustomDateTime> createState() => _CustomDateTimeState();
 }
@@ -17,6 +19,7 @@ class _CustomDateTimeState extends State<CustomDateTime> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: TextField(
+              controller: widget.controller,
               decoration: InputDecoration(
                   filled: true,
                   fillColor: Colors.white,

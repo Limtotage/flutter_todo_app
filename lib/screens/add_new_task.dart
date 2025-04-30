@@ -1,12 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_todo_app/constants/color.dart';
+import 'package:flutter_todo_app/constants/task_type.dart';
 import 'package:flutter_todo_app/customItems/gesture_icon_items.dart';
 import 'package:flutter_todo_app/customItems/add_new_task_header.dart';
 import 'package:flutter_todo_app/customItems/time_date_input_items.dart';
+import 'package:flutter_todo_app/model/task.dart';
 import 'package:hexcolor/hexcolor.dart';
 
-class AddNewTaskScreen extends StatelessWidget {
-  const AddNewTaskScreen({super.key});
+class AddNewTaskScreen extends StatefulWidget {
+  const AddNewTaskScreen({super.key, required this.addNewTask});
+  final void Function(Task newTask) addNewTask;
+
+  @override
+  State<AddNewTaskScreen> createState() => _AddNewTaskScreenState();
+}
+
+class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
+  TextEditingController titleController = TextEditingController();
+  TextEditingController descriptionController = TextEditingController();
+  TextEditingController dateController = TextEditingController();
+  TextEditingController timeController = TextEditingController();
+
+  TaskType taskType = TaskType.note;
+  void selectedIcon(TaskType slctd) {
+    setState(() {
+      taskType = slctd;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +47,7 @@ class AddNewTaskScreen extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
                 child: TextField(
+                  controller: titleController,
                   decoration: InputDecoration(
                       filled: true,
                       fillColor: Colors.white,
@@ -50,10 +71,21 @@ class AddNewTaskScreen extends StatelessWidget {
                         spacing: 7,
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          GestureIconsItem(path: "lib/assets/images/Task.png"),
                           GestureIconsItem(
-                              path: "lib/assets/images/Calendar.png"),
-                          GestureIconsItem(path: "lib/assets/images/Goal.png")
+                            path: "lib/assets/images/Task.png",
+                            taskType: TaskType.note,
+                            onIconSelected: selectedIcon,
+                          ),
+                          GestureIconsItem(
+                            path: "lib/assets/images/Calendar.png",
+                            taskType: TaskType.calendar,
+                            onIconSelected: selectedIcon,
+                          ),
+                          GestureIconsItem(
+                            path: "lib/assets/images/Goal.png",
+                            taskType: TaskType.goal,
+                            onIconSelected: selectedIcon,
+                          )
                         ],
                       ),
                     ),
@@ -64,15 +96,21 @@ class AddNewTaskScreen extends StatelessWidget {
                 padding: const EdgeInsets.only(top: 10.0),
                 child: Row(
                   children: [
-                    CustomDateTime(title: "Date"),
-                    CustomDateTime(title: "Time"),
+                    CustomDateTime(
+                      title: "Date",
+                      controller: dateController,
+                    ),
+                    CustomDateTime(
+                      title: "Time",
+                      controller: timeController,
+                    ),
                   ],
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 10),
                 child: Text(
-                  "Notes",
+                  "Description",
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
               ),
@@ -81,6 +119,7 @@ class AddNewTaskScreen extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: TextField(
+                      controller: descriptionController,
                       expands: true,
                       maxLines: null,
                       decoration: InputDecoration(
@@ -92,7 +131,17 @@ class AddNewTaskScreen extends StatelessWidget {
                               borderRadius: BorderRadius.circular(10))),
                     ),
                   )),
-              ElevatedButton(onPressed: () {}, child: Text("Save"))
+              ElevatedButton(
+                  onPressed: () {
+                    Task newTask = Task(
+                        type: taskType,
+                        title: titleController.text,
+                        description: descriptionController.text,
+                        isCompleted: false);
+                    widget.addNewTask(newTask);
+                    Navigator.pop(context);
+                  },
+                  child: Text("Save"))
             ],
           ),
         ),
