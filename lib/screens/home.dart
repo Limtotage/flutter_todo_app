@@ -5,6 +5,7 @@ import 'package:flutter_todo_app/customItems/header_item.dart';
 import 'package:flutter_todo_app/customItems/todo_item.dart';
 import 'package:flutter_todo_app/model/task.dart';
 import 'package:flutter_todo_app/screens/add_new_task.dart';
+import 'package:flutter_todo_app/services/todo_service.dart';
 import 'package:hexcolor/hexcolor.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -52,6 +53,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    TodoService jsonservice = TodoService();
+    jsonservice.getTodos();
     return MaterialApp(
       home: SafeArea(
         child: Scaffold(
