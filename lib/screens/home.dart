@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_todo_app/constants/color.dart';
 import 'package:flutter_todo_app/constants/task_type.dart';
+import 'package:flutter_todo_app/customItems/custom_button.dart';
 import 'package:flutter_todo_app/customItems/header_item.dart';
 import 'package:flutter_todo_app/customItems/todo_item.dart';
 import 'package:flutter_todo_app/model/task.dart';
 import 'package:flutter_todo_app/screens/add_new_task.dart';
-import 'package:flutter_todo_app/services/todo_service.dart';
 import 'package:hexcolor/hexcolor.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -53,8 +53,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    TodoService jsonservice = TodoService();
-    jsonservice.getTodos();
+    double deviceWidth = MediaQuery.of(context).size.width;
+
     return MaterialApp(
       home: SafeArea(
         child: Scaffold(
@@ -104,15 +104,22 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               //New task button
-              ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => AddNewTaskScreen(
-                        addNewTask: (newTask) => addNewTask(newTask),
-                      ),
-                    ));
-                  },
-                  child: Text("Add New Task")),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 5.0),
+                child: CustomButtonItem(
+                    width: deviceWidth - 40,
+                    height: 40,
+                    text: "Add New Todo",
+                    color: Color(0xFF327E3B),
+                    textColor: Colors.white,
+                    onPressed: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => AddNewTaskScreen(
+                          addNewTask: (newTask) => addNewTask(newTask),
+                        ),
+                      ));
+                    }),
+              )
             ],
           ),
         ),

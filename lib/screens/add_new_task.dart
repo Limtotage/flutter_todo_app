@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_todo_app/constants/color.dart';
 import 'package:flutter_todo_app/constants/task_type.dart';
+import 'package:flutter_todo_app/customItems/custom_button.dart';
 import 'package:flutter_todo_app/customItems/gesture_icon_items.dart';
 import 'package:flutter_todo_app/customItems/add_new_task_header.dart';
 import 'package:flutter_todo_app/customItems/time_date_input_items.dart';
@@ -30,6 +31,7 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double deviceWidth = MediaQuery.of(context).size.width;
     return SafeArea(
       child: Scaffold(
         backgroundColor: HexColor(backGroundColor),
@@ -131,17 +133,24 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
                               borderRadius: BorderRadius.circular(10))),
                     ),
                   )),
-              ElevatedButton(
-                  onPressed: () {
-                    Task newTask = Task(
-                        type: taskType,
-                        title: titleController.text,
-                        description: descriptionController.text,
-                        isCompleted: false);
-                    widget.addNewTask(newTask);
-                    Navigator.pop(context);
-                  },
-                  child: Text("Save"))
+              Padding(
+                padding: const EdgeInsets.only(top: 10.0),
+                child: CustomButtonItem(
+                    width: deviceWidth - 40,
+                    height: 40,
+                    text: "Save",
+                    color: Color(0xFF327E3B),
+                    textColor: Colors.white,
+                    onPressed: () {
+                      Task newTask = Task(
+                          type: taskType,
+                          title: titleController.text,
+                          description: descriptionController.text,
+                          isCompleted: false);
+                      widget.addNewTask(newTask);
+                      Navigator.pop(context);
+                    }),
+              )
             ],
           ),
         ),
