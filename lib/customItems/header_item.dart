@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
 
-class Headeritem extends StatelessWidget {
-  const Headeritem({super.key});
+class Headeritem extends StatefulWidget {
+  const Headeritem({super.key, required this.onTap});
+  final VoidCallback onTap;
 
+  @override
+  State<Headeritem> createState() => _HeaderitemState();
+}
+
+class _HeaderitemState extends State<Headeritem> {
   @override
   Widget build(BuildContext context) {
     double deviceHeight = MediaQuery.of(context).size.height;
@@ -19,13 +25,25 @@ class Headeritem extends StatelessWidget {
       child: Column(
         children: [
           Padding(
-            padding: EdgeInsets.only(top: 25),
-            child: Text(
-              "Bugunun Tarihi",
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold),
+            padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
+            child: Row(
+              spacing: 85,
+              children: [
+                GestureDetector(
+                  onTap: widget.onTap,
+                  child: Image.asset("lib/assets/images/back_button.png"),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 25),
+                  child: Text(
+                    "Bugunun Tarihi",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ],
             ),
           ),
           Padding(

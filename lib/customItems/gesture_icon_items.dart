@@ -15,10 +15,6 @@ class GestureIconsItem extends StatefulWidget {
 }
 
 class _GestureIconsItemState extends State<GestureIconsItem> {
-  TaskType retype(TaskType res) {
-    return res;
-  }
-
   @override
   Widget build(BuildContext context) {
     return GestureDetector(

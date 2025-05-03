@@ -1,30 +1,45 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_todo_app/screens/home.dart';
+import 'package:flutter_todo_app/constants/color.dart';
+import 'package:flutter_todo_app/customItems/custom_button.dart';
+import 'package:flutter_todo_app/customItems/login_page_header.dart';
 import 'package:flutter_todo_app/services/auth.dart';
+import 'package:hexcolor/hexcolor.dart';
 
-class LoginRagistePage extends StatefulWidget {
-  const LoginRagistePage({super.key});
+class LoginRagisterPage extends StatefulWidget {
+  const LoginRagisterPage({super.key});
 
   @override
-  State<LoginRagistePage> createState() => _LoginRagistePageState();
+  State<LoginRagisterPage> createState() => _LoginRagisterPageState();
 }
 
-class _LoginRagistePageState extends State<LoginRagistePage> {
+class _LoginRagisterPageState extends State<LoginRagisterPage> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
   bool isLogin = true;
   String? errorMessage;
 
+  void showMessage(String message, bool isError) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        backgroundColor: isError ? Colors.red : Colors.green,
+        duration: Duration(milliseconds: 700),
+        content: Text(message),
+      ),
+    );
+  }
+
   Future<void> createuser() async {
     try {
       await Auth().createUser(
           email: emailController.text, password: passwordController.text);
+      showMessage("Register Successful", false);
     } on FirebaseAuthException catch (e) {
       setState(() {
         errorMessage = e.message;
       });
+      showMessage("Register Error. Password or Email is invalid.", true);
     }
   }
 
@@ -32,68 +47,86 @@ class _LoginRagistePageState extends State<LoginRagistePage> {
     try {
       await Auth().userLogin(
           email: emailController.text, password: passwordController.text);
-      //print(Auth().currentUser!.uid);
+      showMessage("Login Successful", false);
     } on FirebaseAuthException catch (e) {
       setState(() {
         errorMessage = e.message;
       });
+      showMessage("Login Error. Password or Email is incorrect.", true);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            TextField(
-              controller: emailController,
-              decoration: const InputDecoration(
-                hintText: "Enter Your E-mail",
-                border: OutlineInputBorder(),
-              ),
+    double deviceWidth = MediaQuery.of(context).size.width;
+
+    return SafeArea(
+      child: Scaffold(
+          backgroundColor: HexColor(backGroundColor),
+          body: SingleChildScrollView(
+            child: Column(
+              spacing: 10,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 100.0),
+                  child: LoginHeader(),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: TextField(
+                    controller: emailController,
+                    decoration: InputDecoration(
+                      fillColor: Colors.white,
+                      filled: true,
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.grey, width: 5),
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      hintText: "Enter Your E-mail",
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: TextField(
+                    controller: passwordController,
+                    obscureText: true,
+                    decoration: InputDecoration(
+                      fillColor: Colors.white,
+                      filled: true,
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.grey, width: 5),
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      hintText: "Enter Your Password",
+                    ),
+                  ),
+                ),
+                CustomButtonItem(
+                    width: deviceWidth - 40,
+                    height: 40,
+                    text: isLogin ? "Login" : "Sign Up",
+                    color: Color(0xFF327E3B),
+                    textColor: Colors.white,
+                    onPressed: () {
+                      if (isLogin) {
+                        userLogin();
+                      } else {
+                        createuser();
+                      }
+                    }),
+                GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        isLogin = !isLogin;
+                      });
+                    },
+                    child: isLogin
+                        ? Text("Don't have an account yet? Press!")
+                        : const Text("Already have an account? Press!")),
+              ],
             ),
-            TextField(
-              controller: passwordController,
-              obscureText: true,
-              decoration: const InputDecoration(
-                hintText: "Enter Your Password",
-                border: OutlineInputBorder(),
-              ),
-            ),
-            errorMessage != null
-                ? Text(errorMessage!)
-                : const SizedBox.shrink(),
-            ElevatedButton(
-                onPressed: () {
-                  if (isLogin) {
-                    userLogin();
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => HomeScreen(),
-                    ));
-                  } else {
-                    createuser();
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => HomeScreen(),
-                    ));
-                  }
-                },
-                child: isLogin ? const Text("Login") : const Text("Sign Up")),
-            GestureDetector(
-                onTap: () {
-                  setState(() {
-                    isLogin = !isLogin;
-                  });
-                },
-                child: isLogin
-                    ? Text("Don't have an account yet? Press!")
-                    : const Text("Already have an account? Press!")),
-          ],
-        ),
-      ),
+          )),
     );
   }
 }

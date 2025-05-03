@@ -1,11 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_todo_app/constants/color.dart';
-import 'package:flutter_todo_app/constants/task_type.dart';
 import 'package:flutter_todo_app/customItems/custom_button.dart';
 import 'package:flutter_todo_app/customItems/header_item.dart';
 import 'package:flutter_todo_app/customItems/todo_item.dart';
 import 'package:flutter_todo_app/model/task.dart';
 import 'package:flutter_todo_app/screens/add_new_task.dart';
+import 'package:flutter_todo_app/services/auth.dart';
+import 'package:flutter_todo_app/services/firestore.dart';
 import 'package:hexcolor/hexcolor.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -16,44 +18,11 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  List<Task> todo = [
-    Task(
-        type: TaskType.note,
-        title: "Study Lesson",
-        description: "Study Comp177",
-        isCompleted: false),
-    Task(
-        type: TaskType.goal,
-        title: "Run 5 Km",
-        description: "Just Do It!",
-        isCompleted: false),
-    Task(
-        type: TaskType.calendar,
-        title: "Go to Party",
-        description: "Attend to party",
-        isCompleted: false),
-  ];
-  List<Task> todoCompleted = [
-    Task(
-        type: TaskType.goal,
-        title: "Run 5 Km",
-        description: "Just Do It!",
-        isCompleted: false),
-    Task(
-        type: TaskType.calendar,
-        title: "Go to Party",
-        description: "Attend to party",
-        isCompleted: false),
-  ];
-  void addNewTask(Task newTask) {
-    setState(() {
-      todo.add(newTask);
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
+    Auth firebaseAuth = Auth();
     double deviceWidth = MediaQuery.of(context).size.width;
+    FirestoreService fire = FirestoreService();
 
     return MaterialApp(
       home: SafeArea(
@@ -62,20 +31,41 @@ class _HomeScreenState extends State<HomeScreen> {
           body: Column(
             children: [
               //Header
-              Headeritem(),
+              Headeritem(onTap: () {
+                firebaseAuth.userLogout();
+              }),
               //Top Column
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
                   child: SingleChildScrollView(
-                      child: ListView.builder(
-                    primary: false,
-                    shrinkWrap: true,
-                    itemCount: todo.length,
-                    itemBuilder: (context, index) {
-                      return Todoitem(task: todo[index]);
-                    },
-                  )),
+                      child: StreamBuilder<QuerySnapshot>(
+                          stream: fire.getUserUnCompletedTodos(),
+                          builder: (context, snapshot) {
+                            if (!snapshot.hasData) {
+                              return CircularProgressIndicator();
+                            }
+                            final todos = snapshot.data!.docs;
+
+                            return ListView.builder(
+                              primary: false,
+                              shrinkWrap: true,
+                              itemCount: todos.length,
+                              itemBuilder: (context, index) {
+                                final todo = todos[index];
+                                Task task = Task(
+                                    description: todo["description"],
+                                    isCompleted: false,
+                                    title: todo["title"],
+                                    type: todo["iconType"]);
+                                return Todoitem(
+                                  docId: todo.id,
+                                  task: task,
+                                  completed: todo["completed"],
+                                );
+                              },
+                            );
+                          })),
                 ),
               ),
               //Completed Text
@@ -93,14 +83,32 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
                   child: SingleChildScrollView(
-                      child: ListView.builder(
-                    primary: false,
-                    shrinkWrap: true,
-                    itemCount: todoCompleted.length,
-                    itemBuilder: (context, index) {
-                      return Todoitem(task: todoCompleted[index]);
-                    },
-                  )),
+                      child: StreamBuilder<QuerySnapshot>(
+                          stream: fire.getUserCompletedTodos(),
+                          builder: (context, snapshot) {
+                            if (!snapshot.hasData) {
+                              return CircularProgressIndicator();
+                            }
+                            final completedTodos = snapshot.data!.docs;
+                            return ListView.builder(
+                              primary: false,
+                              shrinkWrap: true,
+                              itemCount: completedTodos.length,
+                              itemBuilder: (context, index) {
+                                final completedTodo = completedTodos[index];
+                                Task completedTask = Task(
+                                    description: completedTodo["description"],
+                                    isCompleted: false,
+                                    title: completedTodo["title"],
+                                    type: completedTodo["iconType"]);
+                                return Todoitem(
+                                  docId: completedTodo.id,
+                                  task: completedTask,
+                                  completed: completedTodo["completed"],
+                                );
+                              },
+                            );
+                          })),
                 ),
               ),
               //New task button
@@ -114,9 +122,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     textColor: Colors.white,
                     onPressed: () {
                       Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => AddNewTaskScreen(
-                          addNewTask: (newTask) => addNewTask(newTask),
-                        ),
+                        builder: (context) => AddNewTaskScreen(),
                       ));
                     }),
               )

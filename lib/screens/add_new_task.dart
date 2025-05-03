@@ -5,12 +5,11 @@ import 'package:flutter_todo_app/customItems/custom_button.dart';
 import 'package:flutter_todo_app/customItems/gesture_icon_items.dart';
 import 'package:flutter_todo_app/customItems/add_new_task_header.dart';
 import 'package:flutter_todo_app/customItems/time_date_input_items.dart';
-import 'package:flutter_todo_app/model/task.dart';
+import 'package:flutter_todo_app/services/firestore.dart';
 import 'package:hexcolor/hexcolor.dart';
 
 class AddNewTaskScreen extends StatefulWidget {
-  const AddNewTaskScreen({super.key, required this.addNewTask});
-  final void Function(Task newTask) addNewTask;
+  const AddNewTaskScreen({super.key});
 
   @override
   State<AddNewTaskScreen> createState() => _AddNewTaskScreenState();
@@ -21,6 +20,8 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
   TextEditingController descriptionController = TextEditingController();
   TextEditingController dateController = TextEditingController();
   TextEditingController timeController = TextEditingController();
+
+  FirestoreService fire = FirestoreService();
 
   TaskType taskType = TaskType.note;
   void selectedIcon(TaskType slctd) {
@@ -38,7 +39,9 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
         body: SingleChildScrollView(
           child: Column(
             children: [
-              AddHeaderItem(),
+              AddHeaderItem(onTap: () {
+                Navigator.of(context).pop();
+              }),
               Padding(
                 padding: const EdgeInsets.only(top: 10),
                 child: Text(
@@ -142,12 +145,7 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
                     color: Color(0xFF327E3B),
                     textColor: Colors.white,
                     onPressed: () {
-                      Task newTask = Task(
-                          type: taskType,
-                          title: titleController.text,
-                          description: descriptionController.text,
-                          isCompleted: false);
-                      widget.addNewTask(newTask);
+                      addTodoToService();
                       Navigator.pop(context);
                     }),
               )
@@ -156,5 +154,14 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
         ),
       ),
     );
+  }
+
+  void addTodoToService() {
+    if (titleController.text != "") {
+      fire.saveTodo(
+          title: titleController.text,
+          description: descriptionController.text,
+          type: taskType.name);
+    }
   }
 }

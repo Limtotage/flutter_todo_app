@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 
-class AddHeaderItem extends StatelessWidget {
-  const AddHeaderItem({super.key});
+class AddHeaderItem extends StatefulWidget {
+  const AddHeaderItem({super.key, required this.onTap});
+  final VoidCallback onTap;
+  @override
+  State<AddHeaderItem> createState() => _AddHeaderItemState();
+}
 
+class _AddHeaderItemState extends State<AddHeaderItem> {
   @override
   Widget build(BuildContext context) {
     double deviceHeight = MediaQuery.of(context).size.height;
@@ -16,23 +21,21 @@ class AddHeaderItem extends StatelessWidget {
               image: AssetImage("lib/assets/images/addNewTaskHeader.png"),
               fit: BoxFit.cover)),
       child: Row(
+        spacing: 80,
         children: [
-          IconButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              icon: Icon(
-                Icons.close,
-                size: 40,
-                color: Colors.white,
-              )),
-          Expanded(
-              child: Text(
+          Padding(
+            padding: const EdgeInsets.only(left: 10),
+            child: GestureDetector(
+              onTap: widget.onTap,
+              child: Image.asset("lib/assets/images/back_button.png"),
+            ),
+          ),
+          Text(
             "Add New Task",
             textAlign: TextAlign.center,
             style: TextStyle(
                 color: Colors.white, fontWeight: FontWeight.bold, fontSize: 21),
-          ))
+          )
         ],
       ),
     );
