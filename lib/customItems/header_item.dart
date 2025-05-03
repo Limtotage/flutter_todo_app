@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class Headeritem extends StatefulWidget {
   const Headeritem({super.key, required this.onTap});
@@ -9,6 +10,7 @@ class Headeritem extends StatefulWidget {
 }
 
 class _HeaderitemState extends State<Headeritem> {
+  final String today = DateFormat('dd.MM.yyyy').format(DateTime.now()); 
   @override
   Widget build(BuildContext context) {
     double deviceHeight = MediaQuery.of(context).size.height;
@@ -36,7 +38,7 @@ class _HeaderitemState extends State<Headeritem> {
                 Padding(
                   padding: EdgeInsets.only(top: 25),
                   child: Text(
-                    "Bugunun Tarihi",
+                    today,
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 18,
